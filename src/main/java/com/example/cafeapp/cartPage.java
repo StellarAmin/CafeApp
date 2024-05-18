@@ -23,21 +23,22 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class cartPage {
-    static String cartPath = CoffeeRestaurantApp.appPath.concat("\\src\\main\\java\\com\\example\\coffeeapp\\cart.txt");
+    static String cartPath = CafeRestaurantApp.appPath.concat("\\src\\main\\java\\com\\example\\coffeeapp\\cart.txt");
     private static Scene scene;
-    
 
-        // ShoppingCart class manages items added to the cart and calculates the total
+    // ShoppingCart class manages items added to the cart and calculates the total
     static class ShoppingCart {
         private ObservableList<String> items = FXCollections.observableArrayList();
         private ObservableList<Double> prices = FXCollections.observableArrayList();
         private double total = 0;
+
         // Method to add an item to the shopping cart
         public void addItem(String item, double price) {
             items.add(item);
             prices.add(price);
             total += price;
         }
+
         // Method to retrieve the items in the shopping cart
         public ObservableList<String> getItems() {
             return items;
@@ -58,7 +59,7 @@ public class cartPage {
         }
     }
 
-// Read From File 
+    // Read From File
     static ShoppingCart loadCartFromFile() {
         ShoppingCart cart = new ShoppingCart();
         try (BufferedReader reader = new BufferedReader(new FileReader(cartPath))) {
@@ -82,7 +83,8 @@ public class cartPage {
         }
         return cart;
     }
-    // Creating menu items for coffee and food [ARRAY LIST] & Float used for price as well as in main.
+    // Creating menu items for drinks and food [ARRAY LIST] & Float used for price
+    // as well as in main.
 
     static void saveCartToFile(ShoppingCart cart) {
         try (PrintWriter writer = new PrintWriter(cartPath)) {
@@ -102,9 +104,9 @@ public class cartPage {
     }
 
     public Scene getScene(Stage primaryStage) {
-         ShoppingCart cart = loadCartFromFile();
-        // Creating buttons for coffee and food menus as Vertical Boxes
-        
+        ShoppingCart cart = loadCartFromFile();
+        // Creating buttons for drinks and food menus as Vertical Boxes
+
         ListView<String> cartListView = new ListView<>();
         cartListView.setItems(cart.getItems());
 
@@ -114,10 +116,11 @@ public class cartPage {
         VBox cartAndPayment = new VBox(10, new Label("Cart"), cartListView, totalLabel, checkoutButton);
         cartAndPayment.setAlignment(Pos.CENTER);
 
-        File bgImgFile = new File(CoffeeRestaurantApp.appPath.concat("\\src\\media\\bg.jpg"));
-        BackgroundImage myBackgroundImage = new BackgroundImage(new Image(bgImgFile.toURI().toString()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1.0, 1.0, true, true, false, true));
+        File bgImgFile = new File(CafeRestaurantApp.appPath.concat("\\src\\media\\bg.jpg"));
+        BackgroundImage myBackgroundImage = new BackgroundImage(new Image(bgImgFile.toURI().toString()),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(1.0, 1.0, true, true, false, true));
 
-        
         HBox root = new HBox(20, cartAndPayment);
         root.setAlignment(Pos.CENTER);
         // Creating the scene and displaying the stage
