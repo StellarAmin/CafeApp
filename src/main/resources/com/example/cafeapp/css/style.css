@@ -6,6 +6,21 @@
     );
 }
 
-#loginScreenVBox {
-    margin: auto;
+#cartListView {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        #ecb176,
+        #6f4e37
+    );
+}
+
+#menuLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+#menuButtonLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-background-color: #ecb176;
 }

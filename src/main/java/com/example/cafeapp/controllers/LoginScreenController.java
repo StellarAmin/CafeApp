@@ -1,5 +1,6 @@
 package com.example.cafeapp.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -9,16 +10,21 @@ import com.example.cafeapp.App;
 import com.example.cafeapp.Customer;
 import com.example.cafeapp.dao.CustomerDao;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -31,26 +37,20 @@ public class LoginScreenController implements Initializable {
     private Label emailLabel;
 
     @FXML
-    private TextField emailFieldFXML;
+    private TextField emailField;
 
     @FXML
     private Label passwordLabel;
 
     @FXML
-    private PasswordField passwordFieldFXML;
+    private PasswordField passwordField;
 
     @FXML
-    private Button loginButtonFXML;
+    private Button loginButton;
 
     @FXML
-    private Button registerButtonFXML;
+    private Button registerButton;
 
-    private Label titleLabel = new Label("Login");
-    private TextField emailField = new TextField();
-    private PasswordField passwordField = new PasswordField();
-    private Button loginButton = new Button("Login");
-    private Button registerButton = new Button("Register");
-    private VBox loginLayout = new VBox(10);
     private Stage stage;
 
     @FXML
@@ -62,7 +62,15 @@ public class LoginScreenController implements Initializable {
             Customer.setEmail(email);
 
             if (userExists()) {
-                // showMainMenuScreen(Customer.getName());
+                try {
+                    FXMLLoader loader = new FXMLLoader(
+                            getClass().getResource("/com/example/cafeapp/view/MainMenu.fxml"));
+                    VBox box = loader.load();
+                    App.pane.setCenter(box);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             } else {
                 showAlert("Invalid credentials", "User doesn't exist");
             }
@@ -73,47 +81,13 @@ public class LoginScreenController implements Initializable {
 
     @FXML
     void showRegisterScreen(ActionEvent event) {
-        Label titleLabel = new Label("Register");
-        TextField usernameField = new TextField();
-        TextField emailField = new TextField();
-        PasswordField passwordField = new PasswordField();
-        Button registerButton = new Button("Register");
-        Button backButton = new Button("Back to Login");
-        VBox registerLayout = new VBox(10);
-        registerLayout.getChildren().addAll(titleLabel, new Label("Username:"), usernameField, new Label("Email:"),
-                emailField, new Label("Password:"), passwordField, registerButton, backButton);
-        registerLayout.setAlignment(Pos.CENTER);
-        Scene registerScene = new Scene(registerLayout, 300, 200);
-        App.primaryStage.setScene(registerScene);
-        App.primaryStage.setTitle("Coffee & Restaurant App - Register");
-        App.primaryStage.show();
-
-        registerButton.setOnAction(b -> {
-            // Simulate registration by storing username and password
-            String username = usernameField.getText();
-            String email = emailField.getText();
-            String password = passwordField.getText();
-            Customer.setName(username);
-            Customer.setEmail(email);
-            Customer.setPassword(password);
-
-            try {
-                CustomerDao.signUpCustomer(); // Save customer to database (for
-                // demonstration)
-            } catch (SQLException e) {
-                Logger.getLogger(e.getMessage());
-            }
-
-            // Print registration details (for demonstration)
-            System.out.println("Registered username: " + username);
-            System.out.println("Registered email: " + email);
-            System.out.println("Registered password: " + password);
-
-            // Automatically login after registration
-            // showMainMenuScreen(username); // Pass username to main menu
-        });
-
-        // backButton.setOnAction(b -> showLoginScreen());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cafeapp/view/RegisterScreen.fxml"));
+            VBox box = loader.load();
+            App.pane.setCenter(box);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String title, String message) {

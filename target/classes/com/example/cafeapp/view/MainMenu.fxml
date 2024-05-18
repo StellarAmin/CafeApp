@@ -1,8 +1,37 @@
-<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml">
-    <Label text="Main Menu"/>
-    <Button text="View Menu" onAction="#showMenuScreen"/>
-    <Button text="Place Order" onAction="#handlePlaceOrder"/>
-    <Button text="About" onAction="#showAboutScreen"/>
-    <Button text="Contact" onAction="#showContactScreen"/>
-    <Button text="Logout" onAction="#handleLogout"/>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.cafeapp.controllers.MainMenuController">
+    <Label fx:id="mainMenuLabel" text="Main Menu" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="18.0" />
+      </font></Label>
+    <Button fx:id="viewMenuButton" onAction="#showMenuScreen" style="-fx-background-color: #ECB176;" text="View Menu" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font></Button>
+    <Button fx:id="placeOrderButton" onAction="#handlePlaceOrder" style="-fx-background-color: #ECB176;" text="Place Order" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font></Button>
+    <Button fx:id="aboutButton" onAction="#showAboutScreen" style="-fx-background-color: #ECB176;" text="About" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font></Button>
+    <Button fx:id="contactButton" onAction="#showContactScreen" style="-fx-background-color: #ECB176;" text="Contact" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font></Button>
+    <Button fx:id="logoutButton" onAction="#handleLogout" style="-fx-background-color: #ECB176;" text="Logout" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font></Button>
+   <padding>
+      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+   </padding>
 </VBox>

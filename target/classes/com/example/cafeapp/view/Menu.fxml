@@ -1,4 +1,36 @@
-<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml">
-    <Label text="Menu"/>
-    <Button text="Back to Main Menu" onAction="#showMainMenuScreen"/>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cafeapp.controllers.MenuController">
+    <Label text="Menu" textFill="WHITE">
+      <font>
+         <Font name="System Bold" size="24.0" />
+      </font></Label>
+            <VBox alignment="CENTER" spacing="10">
+            <Label text="Coffee Menu" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+            <VBox fx:id="drinkButtons" alignment="CENTER" spacing="5" style="-fx-text-fill: white;" />
+            <Label text="Food Menu" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+            <VBox fx:id="foodButtons" alignment="CENTER" spacing="5" style="-fx-text-fill: white;" />
+        </VBox>
+    <Button onAction="#showMainMenuScreen" style="-fx-background-color: #ECB176;" text="Back to Main Menu" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font>
+      <VBox.margin>
+         <Insets top="10.0" />
+      </VBox.margin></Button>
+   <padding>
+      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+   </padding>
 </VBox>
