@@ -13,24 +13,26 @@ class CustomerDao {
 	private static final Logger logger = Logger.getLogger(CustomerDao.class.getName());
 	public static Customer customer = null;
 
-	public static boolean searchCustomer(String customerEmail) throws SQLException {
+	public static boolean searchCustomer() throws SQLException {
 		Connection connection = Database.dbConnection;
 		PreparedStatement statement = null;
+		boolean flag = false;
 
 		try {
 			connection.setAutoCommit(false);
 			String query = "SELECT id, name, email FROM customer WHERE email = ?";
 			statement = connection.prepareStatement(query);
 			int counter = 1;
-			statement.setString(counter++, customerEmail);
+			statement.setString(counter++, Customer.getEmail());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				String name = resultSet.getString(2);
-				String email = resultSet.getString(3);
-				customer = new Customer(name, email);
+				flag = true;
+				Customer.setId(resultSet.getInt(1));
+				Customer.setName(resultSet.getString(2));
+				Customer.setEmail(resultSet.getString(3));
 			}
 
-			return customer == null ? false : true;
+			return flag;
 		} catch (SQLException exception) {
 			logger.log(Level.SEVERE, exception.getMessage());
 		} finally {
@@ -39,10 +41,11 @@ class CustomerDao {
 			}
 		}
 
-		return customer == null ? false : true;
+		return flag;
+
 	}
 
-	public static int saveCustomer(Customer Customer) throws SQLException {
+	public static int saveCustomer() throws SQLException {
 		Connection connection = Database.dbConnection;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -58,6 +61,7 @@ class CustomerDao {
 			connection.commit();
 			resultSet = statement.getGeneratedKeys();
 			if (resultSet.next()) {
+				searchCustomer();
 				return resultSet.getInt(1);
 			}
 		} catch (SQLException exception) {

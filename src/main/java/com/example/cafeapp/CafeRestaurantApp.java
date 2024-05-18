@@ -8,7 +8,9 @@ import java.util.logging.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.application.Application;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -20,7 +22,7 @@ import javafx.stage.Stage;
 public class CafeRestaurantApp extends Application {
     static String appPath = new File("").getAbsolutePath().concat("\\cafeapp");
 
-    private void saveCartToFile() {
+    void saveCartToFile() {
         try {
             new ObjectMapper().writeValue(new File(appPath), ShoppingCart.getItems());
         } catch (IOException e) {
@@ -30,7 +32,7 @@ public class CafeRestaurantApp extends Application {
     }
 
     // Read From File [had an issue with it and I need some help to fix it]
-    private void loadCartFromFile() {
+    void loadCartFromFile() {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
@@ -78,16 +80,23 @@ public class CafeRestaurantApp extends Application {
         Button checkoutButton = new Button("Checkout");
 
         loadCartFromFile();
-        // Creating buttons for drinks and food menus as Vertical Boxes
-        VBox drinkButtons = createMenuButtons(drinkMenu, nameLabel, priceLabel, totalLabel);
-        VBox foodButtons = createMenuButtons(foodMenu, nameLabel, priceLabel, totalLabel);
 
-        ListView<MenuItem> cartListView = new ListView<>();
-        try {
-            cartListView.setItems(FXCollections.observableList(ShoppingCart.getItems()));
-        } catch (NullPointerException e) {
-            Logger.getLogger(e.getMessage());
-        }
+        ListView<String> cartListView = new ListView<>();
+        // Creating buttons for drinks and food menus as Vertical Boxes
+        VBox drinkButtons = createMenuButtons(drinkMenu, nameLabel, priceLabel, totalLabel, cartListView);
+        VBox foodButtons = createMenuButtons(foodMenu, nameLabel, priceLabel, totalLabel, cartListView);
+
+        // try {
+        // for (MenuItem item : ShoppingCart.getItems()) {
+        // itemNames.add(item.getName());
+        // System.out.println(itemNames);
+
+        // }
+        // cartListView.setItems(itemNames);
+
+        // } catch (NullPointerException e) {
+        // Logger.getLogger(e.getMessage());
+        // }
 
         VBox cartAndPayment = new VBox(10, new Label("Cart"), cartListView, totalLabel, checkoutButton);
         cartAndPayment.setAlignment(Pos.CENTER);
@@ -105,7 +114,9 @@ public class CafeRestaurantApp extends Application {
 
         checkoutButton.setOnAction(b -> {
             try {
-                OrderDao.addOrder();
+                if (ShoppingCart.getItems().size() > 0) {
+                    OrderDao.addOrder();
+                }
             } catch (Exception e) {
                 Logger.getLogger(e.getMessage());
             }
@@ -131,15 +142,19 @@ public class CafeRestaurantApp extends Application {
     }
 
     private VBox createMenuButtons(
-            List<MenuItem> menu, Label nameLabel, Label priceLabel, Label totalLabel) {
+            List<MenuItem> menu, Label nameLabel, Label priceLabel, Label totalLabel, ListView cartListView) {
         VBox menuButtons = new VBox(5);
-        List<MenuItem> items = new ArrayList<>();
         for (MenuItem item : menu) {
             Button button = new Button(item.getName() + " - $" + String.format("%.2f", item.getPrice()));
             button.setOnAction(e -> {
                 nameLabel.setText(nameLabel.getText() + "\n" + item.getName());
                 priceLabel.setText(priceLabel.getText() + "\n$" + String.format("%.2f", item.getPrice()));
                 ShoppingCart.addItem(item);
+                ObservableList itemNames = FXCollections.observableArrayList();
+                for (MenuItem cartItem : ShoppingCart.getItems()) {
+                    itemNames.add(cartItem.getName());
+                }
+                cartListView.setItems(itemNames);
                 totalLabel.setText("Total: $" + String.format("%.2f", ShoppingCart.getTotal()));
             });
             menuButtons.getChildren().add(button);

@@ -21,6 +21,26 @@ class OrderDao {
 
 		try {
 			connection.setAutoCommit(false);
+			String query = "INSERT INTO `order`(customer_id) VALUES(?)";
+			statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			int counter = 1;
+			statement.setInt(counter++, Customer.getId());
+			statement.executeUpdate();
+			connection.commit();
+		} catch (SQLException exception) {
+			logger.log(Level.SEVERE, exception.getMessage());
+			if (connection != null) {
+				connection.rollback();
+			}
+		} finally {
+			if (statement != null) {
+				statement.close();
+			}
+
+		}
+
+		try {
+			connection.setAutoCommit(false);
 			String query = "SELECT id FROM `order` ORDER BY id DESC LIMIT 1";
 			statement = connection.prepareStatement(query);
 			ResultSet resultSet = statement.executeQuery();
@@ -47,7 +67,7 @@ class OrderDao {
 		ResultSet resultSet = null;
 		int orderId = 0;
 		try {
-			orderId = getLastOrderId() + 1;
+			orderId = getLastOrderId();
 			connection.setAutoCommit(false);
 			String query = "INSERT INTO order_menu(order_id, menu_id) VALUES(?, ?)";
 			statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);

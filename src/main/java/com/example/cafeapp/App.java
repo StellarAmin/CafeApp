@@ -47,8 +47,10 @@ public class App extends Application {
             String password = passwordField.getText();
             // Simulate login process (check credentials)
             if (!email.isEmpty() && !password.isEmpty()) {
-                if (userExists(email)) {
-                    showMainMenuScreen(CustomerDao.customer.getName());
+                Customer.setEmail(email);
+
+                if (userExists()) {
+                    showMainMenuScreen(Customer.getName());
                 } else {
                     showAlert("Invalid credentials", "User doesn't exist");
                 }
@@ -60,9 +62,9 @@ public class App extends Application {
         registerButton.setOnAction(e -> showRegisterScreen());
     }
 
-    private boolean userExists(String email) {
+    private boolean userExists() {
         try {
-            return CustomerDao.searchCustomer(email);
+            return CustomerDao.searchCustomer();
         } catch (Exception e) {
             Logger.getLogger(e.getMessage());
             return false;
@@ -90,10 +92,13 @@ public class App extends Application {
             String username = usernameField.getText();
             String email = emailField.getText();
             String password = passwordField.getText();
+            Customer.setName(username);
+            Customer.setEmail(email);
+            Customer.setPassword(password);
 
             try {
-                CustomerDao.saveCustomer(new Customer(username, email, password)); // Save customer to database (for
-                                                                                   // demonstration)
+                CustomerDao.saveCustomer(); // Save customer to database (for
+                                            // demonstration)
             } catch (SQLException e) {
                 Logger.getLogger(e.getMessage());
             }
