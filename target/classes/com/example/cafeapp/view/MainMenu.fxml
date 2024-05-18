@@ -1,0 +1,8 @@
+<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml">
+    <Label text="Main Menu"/>
+    <Button text="View Menu" onAction="#showMenuScreen"/>
+    <Button text="Place Order" onAction="#handlePlaceOrder"/>
+    <Button text="About" onAction="#showAboutScreen"/>
+    <Button text="Contact" onAction="#showContactScreen"/>
+    <Button text="Logout" onAction="#handleLogout"/>
+</VBox>

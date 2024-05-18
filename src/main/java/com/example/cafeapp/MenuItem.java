@@ -1,7 +1,7 @@
 package com.example.cafeapp;
 
 // MenuItem class represents items on the menu
-class MenuItem {
+public class MenuItem {
     private int id;
     private String name, type;
     private double price;

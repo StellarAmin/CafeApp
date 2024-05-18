@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.example.cafeapp.dao.MenuItemDao;
+import com.example.cafeapp.dao.OrderDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javafx.application.Application;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -36,6 +36,7 @@ public class CafeRestaurantApp extends Application {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
+            @SuppressWarnings("unchecked")
             List<MenuItem> items = objectMapper.readValue(new File(appPath), List.class);
             for (MenuItem item : items) {
                 ShoppingCart.addItem(item);
@@ -141,6 +142,7 @@ public class CafeRestaurantApp extends Application {
         orderProcessingThread.start();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private VBox createMenuButtons(
             List<MenuItem> menu, Label nameLabel, Label priceLabel, Label totalLabel, ListView cartListView) {
         VBox menuButtons = new VBox(5);

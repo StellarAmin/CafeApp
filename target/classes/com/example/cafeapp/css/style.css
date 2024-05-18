@@ -1,0 +1,11 @@
+#root {
+    -fx-background-color: linear-gradient(
+        from 0% 0% to 100% 100%,
+        #6f4e37,
+        #ecb176
+    );
+}
+
+#loginScreenVBox {
+    margin: auto;
+}

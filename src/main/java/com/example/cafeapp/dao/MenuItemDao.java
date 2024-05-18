@@ -1,4 +1,4 @@
-package com.example.cafeapp;
+package com.example.cafeapp.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class MenuItemDao {
+import com.example.cafeapp.Database;
+import com.example.cafeapp.MenuItem;
+
+public class MenuItemDao {
 
 	private static final Logger logger = Logger.getLogger(CustomerDao.class.getName());
 

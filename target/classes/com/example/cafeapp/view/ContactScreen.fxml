@@ -1,0 +1,5 @@
+<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml">
+    <Label text="Contact"/>
+    <Label text="For any inquiries, please contact:\nEmail: omarlaaaeldeen620@gmail.com\nPhone: +201151555823"/>
+    <Button text="Back to Main Menu" onAction="#showMainMenuScreen"/>
+</VBox>

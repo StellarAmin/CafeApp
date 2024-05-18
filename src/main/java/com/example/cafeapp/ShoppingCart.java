@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // ShoppingCart class manages items added to the cart and calculates the total
-class ShoppingCart {
+public class ShoppingCart {
     private static List<MenuItem> items = new ArrayList<>();
     private static double total = 0;
 

@@ -1,54 +1,40 @@
-package com.example.cafeapp;
+package com.example.cafeapp.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class OrderDao {
+import com.example.cafeapp.Customer;
+import com.example.cafeapp.Database;
+
+public class CustomerDao {
 
 	private static final Logger logger = Logger.getLogger(CustomerDao.class.getName());
-	public static Customer customer = null;
 
-	public static int getLastOrderId() throws SQLException {
+	public static boolean signInCustomer() throws SQLException {
 		Connection connection = Database.dbConnection;
 		PreparedStatement statement = null;
-		int id = 0;
+		boolean flag = false;
 
 		try {
 			connection.setAutoCommit(false);
-			String query = "INSERT INTO `order`(customer_id) VALUES(?)";
-			statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			int counter = 1;
-			statement.setInt(counter++, Customer.getId());
-			statement.executeUpdate();
-			connection.commit();
-		} catch (SQLException exception) {
-			logger.log(Level.SEVERE, exception.getMessage());
-			if (connection != null) {
-				connection.rollback();
-			}
-		} finally {
-			if (statement != null) {
-				statement.close();
-			}
-
-		}
-
-		try {
-			connection.setAutoCommit(false);
-			String query = "SELECT id FROM `order` ORDER BY id DESC LIMIT 1";
+			String query = "SELECT id, name, email FROM customer WHERE email = ?";
 			statement = connection.prepareStatement(query);
+			int counter = 1;
+			statement.setString(counter++, Customer.getEmail());
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				id = resultSet.getInt(1);
+				flag = true;
+				Customer.setId(resultSet.getInt(1));
+				Customer.setName(resultSet.getString(2));
+				Customer.setEmail(resultSet.getString(3));
 			}
 
-			return id;
+			return flag;
 		} catch (SQLException exception) {
 			logger.log(Level.SEVERE, exception.getMessage());
 		} finally {
@@ -57,30 +43,31 @@ class OrderDao {
 			}
 		}
 
-		return id;
+		return flag;
+
 	}
 
-	public static void addOrder() throws SQLException {
-		List<MenuItem> items = ShoppingCart.getItems();
+	public static int signUpCustomer() throws SQLException {
 		Connection connection = Database.dbConnection;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
-		int orderId = 0;
 		try {
-			orderId = getLastOrderId();
 			connection.setAutoCommit(false);
-			String query = "INSERT INTO order_menu(order_id, menu_id) VALUES(?, ?)";
+			String query = "INSERT INTO Customer(name, email, password) VALUES(?, ?, ?)";
 			statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			for (MenuItem item : items) {
-				statement.setInt(1, orderId);
-				statement.setInt(2, item.getId());
-				statement.addBatch();
-			}
-			statement.executeBatch();
+			int counter = 1;
+			statement.setString(counter++, Customer.getName());
+			statement.setString(counter++, Customer.getEmail());
+			statement.setString(counter++, Customer.getPasword());
+			statement.executeUpdate();
 			connection.commit();
 			resultSet = statement.getGeneratedKeys();
+			if (resultSet.next()) {
+				signInCustomer();
+				return resultSet.getInt(1);
+			}
 		} catch (SQLException exception) {
-			exception.printStackTrace();
+			logger.log(Level.SEVERE, exception.getMessage());
 			if (connection != null) {
 				connection.rollback();
 			}
@@ -94,6 +81,8 @@ class OrderDao {
 			}
 
 		}
+
+		return 0;
 	}
 
 }

@@ -1,0 +1,4 @@
+<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml">
+    <Label text="Menu"/>
+    <Button text="Back to Main Menu" onAction="#showMainMenuScreen"/>
+</VBox>

@@ -1,0 +1,14 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="root" prefHeight="1.0" prefWidth="1.0" stylesheets="@../css/style.css" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.cafeapp.controllers.LoginScreenController">
+    <VBox fx:id="loginScreenVBox" alignment="CENTER" spacing="10" >
+        <Label text="Login" fx:id="loginLabel"/>
+        <Label text="email:" fx:id="emailLabel"/>
+        <TextField fx:id="emailField"/>
+        <Label text="Password:" fx:id="passwordLabel"/>
+        <PasswordField fx:id="passwordField"/>
+        <Button text="Login" onAction="#handleLogin" fx:id="loginButton"/>
+        <Button text="Register" onAction="#showRegisterScreen" fx:id="registerButton"/>
+    </VBox>
+</BorderPane>

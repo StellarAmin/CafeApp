@@ -1,0 +1,5 @@
+<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml">
+    <Label text="About"/>
+    <Label text="This is the Coffee & Restaurant App.\nDeveloped by Omar Alaa & Amin Mossadag."/>
+    <Button text="Back to Main Menu" onAction="#showMainMenuScreen"/>
+</VBox>

@@ -1,12 +1,19 @@
 package com.example.cafeapp;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.example.cafeapp.controllers.LoginScreenController;
+import com.example.cafeapp.dao.CustomerDao;
+import com.example.cafeapp.dao.MenuItemDao;
+
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -14,57 +21,34 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class App extends Application {
-    private Stage primaryStage;
+    public static Stage primaryStage;
+    static String appPath = new File("").getAbsolutePath();
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage newPrimaryStage) {
         try {
             Database.getDBConnection();
         } catch (SQLException e) {
             Logger.getLogger(e.getMessage());
         }
-        this.primaryStage = primaryStage;
-        showLoginScreen();
-    }
-
-    private void showLoginScreen() {
-        Label titleLabel = new Label("Login");
-        TextField emailField = new TextField();
-        PasswordField passwordField = new PasswordField();
-        Button loginButton = new Button("Login");
-        Button registerButton = new Button("Register");
-        VBox loginLayout = new VBox(10);
-        loginLayout.getChildren().addAll(titleLabel, new Label("email:"), emailField, new Label("Password:"),
-                passwordField, loginButton, registerButton);
-        loginLayout.setAlignment(Pos.CENTER);
-        Scene loginScene = new Scene(loginLayout, 300, 200);
-        primaryStage.setScene(loginScene);
-        primaryStage.setTitle("Coffee & Restaurant App - Login");
-        primaryStage.show();
-
-        loginButton.setOnAction(e -> {
-            String email = emailField.getText();
-            String password = passwordField.getText();
-            // Simulate login process (check credentials)
-            if (!email.isEmpty() && !password.isEmpty()) {
-                Customer.setEmail(email);
-
-                if (userExists()) {
-                    showMainMenuScreen(Customer.getName());
-                } else {
-                    showAlert("Invalid credentials", "User doesn't exist");
-                }
-            } else {
-                showAlert("Invalid credentials", "Please enter valid username and password.");
-            }
-        });
-
-        registerButton.setOnAction(e -> showRegisterScreen());
+        primaryStage = newPrimaryStage;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cafeapp/view/LoginScreen.fxml"));
+            BorderPane pane = loader.load();
+            BorderPane.setAlignment(pane, Pos.CENTER);
+            Scene scene = new Scene(pane, 400, 300);
+            primaryStage.setScene(scene);
+            LoginScreenController controller = ((LoginScreenController) loader.getController());
+            controller.setStage(primaryStage);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean userExists() {
         try {
-            return CustomerDao.searchCustomer();
+            return CustomerDao.signInCustomer();
         } catch (Exception e) {
             Logger.getLogger(e.getMessage());
             return false;
@@ -97,8 +81,8 @@ public class App extends Application {
             Customer.setPassword(password);
 
             try {
-                CustomerDao.saveCustomer(); // Save customer to database (for
-                                            // demonstration)
+                CustomerDao.signUpCustomer(); // Save customer to database (for
+                                              // demonstration)
             } catch (SQLException e) {
                 Logger.getLogger(e.getMessage());
             }
@@ -112,7 +96,7 @@ public class App extends Application {
             showMainMenuScreen(username); // Pass username to main menu
         });
 
-        backButton.setOnAction(b -> showLoginScreen());
+        // backButton.setOnAction(b -> showLoginScreen());
     }
 
     private void showMainMenuScreen(String username) {

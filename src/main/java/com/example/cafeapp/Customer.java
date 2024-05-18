@@ -1,22 +1,22 @@
 package com.example.cafeapp;
 
 // Customer class represents a customer
-class Customer {
+public class Customer {
     private static int id;
     private static String name;
     private static String email;
     private static String password;
 
     public Customer(int id, String name, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
+        Customer.id = id;
+        Customer.name = name;
+        Customer.email = email;
+        Customer.password = password;
     }
 
     public Customer(int id, String name, String email) {
-        this.name = name;
-        this.email = email;
+        Customer.name = name;
+        Customer.email = email;
     }
 
     public static int getId() {
